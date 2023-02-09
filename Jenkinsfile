@@ -1,13 +1,13 @@
 pipeline {
     agent any
     tools {
-        maven 'M2_HOME'
+        maven 'Maven'
     }
     stages {
         
         stage('scm checkout') {
             steps {
-               checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/sudhakarbastawade2303/spring-boot-war-example.git']]) 
+               checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/dvpslrn/spring-boot-war-example.git']]) 
             }
         }
         stage('build the scm') {
@@ -17,9 +17,8 @@ pipeline {
         }
         stage('deploy to tomcat server') {
             steps {
-                sh 'mvn install'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat', path: '', url: 'http://43.205.192.136:8080/')], contextPath: '/app/', war: '*/.war'
             }
         }
     }
 }
-
